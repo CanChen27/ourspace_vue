@@ -1,19 +1,29 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <!-- Content here -->
+    <Navbar_comp></Navbar_comp>
+
+    <Filter_comp></Filter_comp>
+
+    <List_comp></List_comp>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Navbar_comp from "@/components/Navbar_comp";
+import Filter_comp from "@/components/Filter_comp";
+import List_comp from "@/components/List_comp";
 
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  components: { Navbar_comp, Filter_comp, List_comp },
+
+  data: function () {
+    return {
+      name: "cchen",
+    };
+  },
+};
 </script>
 
 <style>
@@ -21,8 +31,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
