@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="dark" variant="info">
-    <b-navbar-brand href="#">NavBar</b-navbar-brand>
+    <b-navbar-brand href="#">OurSpace</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -10,10 +10,22 @@
         <b-nav-item-dropdown right>
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <em>User</em>
+            <b-avatar
+              variant="info"
+              src="https://placekitten.com/300/300"
+            ></b-avatar>
+            <em>Perfil</em>
           </template>
-          <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+          <b-dropdown-item href="#">Mi espacio</b-dropdown-item>
+          <b-dropdown-item href="#">
+            Notificaciones
+            <b-badge variant="danger">
+              9
+              <span class="sr-only"> unread messages</span>
+            </b-badge>
+          </b-dropdown-item>
+
+          <b-dropdown-item href="#">Cerrar sesión</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>

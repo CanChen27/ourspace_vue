@@ -2,25 +2,60 @@
   <b-container class="my-3">
     <!-- Content here -->
 
-    <form action="">
-      <button type="button" class="btn btn-primary">Primary</button>
-      <button type="button" class="btn btn-secondary">Secondary</button>
-      <button type="button" class="btn btn-success">Success</button>
-      <button type="button" class="btn btn-danger">Danger</button>
-      <button type="button" class="btn btn-warning">Warning</button>
-      <button type="button" class="btn btn-info">Info</button>
-      <button type="button" class="btn btn-light">Light</button>
-      <button type="button" class="btn btn-dark">Dark</button>
-
-      <button type="button" class="btn btn-link">Link</button>
-    </form>
+    <ul class="d-flex align-item-center justify-content-around">
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filter(1)">
+          <font-awesome-icon icon="fa-solid fa-house" />
+          <label for="">House</label>
+        </div>
+      </li>
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column">
+          <font-awesome-icon icon="hat-wizard" />
+          <label>Hat Wizard</label>
+        </div>
+      </li>
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column">
+          <font-awesome-icon icon="fa-solid fa-lock" />
+          <label>Lock</label>
+        </div>
+      </li>
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column">
+          <font-awesome-icon icon="fa-solid fa-wifi" />
+          <label>Wifi</label>
+        </div>
+      </li>
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column">
+          <font-awesome-icon icon="fa-solid fa-tree" />
+          <label>Tree</label>
+        </div>
+      </li>
+      <li class="">
+        <div class="filterBtn d-flex align-items-center flex-column">
+          <font-awesome-icon icon="fa-solid fa-globe" />
+          <label>Globe</label>
+        </div>
+      </li>
+    </ul>
   </b-container>
 </template>
 
 <script>
 export default {
   name: "Filter_comp",
+  methods: {
+    filter(tipo) {
+      this.$store.dispatch("filterNodeUsersData", tipo);
+    }
+  }
 };
 </script>
 
-<style></style>
+<style>
+.filterBtn:hover {
+  border-bottom: 2px solid #bbb;
+}
+</style>

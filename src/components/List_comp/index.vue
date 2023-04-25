@@ -1,22 +1,29 @@
 <template>
   <div class="container">
     <!-- Content here -->
-
+    <!-- {{ $store.state.resourceListNodeData.userListNode }} -->
     <ul class="d-flex align-items-center justify-content-between flex-wrap">
-      <li v-for="item in items" class="card" style="width: 18rem">
-        <img
-          class="card-img-top"
-          src="@/assets/login_bg.jpg"
-          alt="Card image cap"
-        />
-        <div class="card-body">
-          <h5 class="card-title">Nombre del producto</h5>
-          <p class="card-text">Características - Fecha_ini/Fecha_fin</p>
-          <span>Precio {{ item.mensaje }}€</span
-          ><a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
+      <li
+        v-for="item in this.$store.state.resourceListNodeData.userListNode"
+        :key="item.id"
+      >
+        <b-card
+          :title="item.nombre"
+          img-src="https://picsum.photos/600/300/?image=25"
+          img-alt="Image"
+          img-top
+          tag="article"
+          style="max-width: 15rem"
+          class="mb-2"
+        >
+          <b-card-text> {{ item.descripcion }} </b-card-text>
+          <b-card-text> {{ item.precio }}€- hora </b-card-text>
+
+          <b-button href="#" variant="primary">Go somewhere</b-button>
+        </b-card>
       </li>
-      <List_item_comp></List_item_comp>
+
+      <!-- <List_item_comp></List_item_comp> -->
     </ul>
   </div>
 </template>
@@ -27,7 +34,11 @@ export default {
   name: "List_comp",
   comments: { List_item_comp },
   data() {
-    return { items: [{ mensaje: "Foo" }, { mensaje: "Bar" }] };
+    return { list: [1] };
+  },
+  mounted() {
+    console.log(">>", this);
+    this.$store.dispatch("getNodeUsersData");
   },
 };
 </script>
