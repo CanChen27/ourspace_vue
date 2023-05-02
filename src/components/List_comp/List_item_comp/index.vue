@@ -8,8 +8,8 @@
     <div class="card-body">
       <h5 class="card-title">Nombre del producto</h5>
       <p class="card-text">Características - Fecha_ini/Fecha_fin</p>
-      <span>Precio 100€</span
-      ><a href="#" class="btn btn-primary">Go somewhere</a>
+      <span>Precio 100€</span>
+      <router-link to="/details">Go to About</router-link>
     </div>
   </li>
 </template>

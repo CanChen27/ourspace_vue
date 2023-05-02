@@ -19,7 +19,7 @@
           <b-card-text> {{ item.descripcion }} </b-card-text>
           <b-card-text> {{ item.precio }}€- hora </b-card-text>
 
-          <b-button href="#" variant="primary">Go somewhere</b-button>
+          <b-button variant="primary" @click="goDetails(item.id)">Go somewhere</b-button>
         </b-card>
       </li>
 
@@ -40,6 +40,18 @@ export default {
     console.log(">>", this);
     this.$store.dispatch("getNodeUsersData");
   },
+  methods: {
+    goDetails(_id) {
+      console.log(">>list_comp", _id);
+      // e.preventDefault();
+      this.$router.push({
+        name: "detailsName",
+        query: {
+          id :_id
+        }
+      });
+    }
+  }
 };
 </script>
 

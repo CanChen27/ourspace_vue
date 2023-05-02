@@ -30,9 +30,13 @@ Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
 
-// Vue.config.productionTip = false;
+Vue.config.productionTip = false;
+
+import router from "@/router"
+Vue.use(router);
 
 new Vue({
+  router,
   render: (h) => h(App),
   store,
   beforeCreate() {

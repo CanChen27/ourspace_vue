@@ -9,6 +9,26 @@ export const reqNodeResourceList = () => {
   return myNodeRequest({ url: "/resources", method: "get" });
 };
 
+export const reqNodePostImg = (formData) => {
+
+  console.log(">>cchen /api/index--formData", formData);
+  return myNodeRequest({ 
+    url: "/resources/img", 
+    method: "post",
+    data:formData,
+    headers: { 'Content-Type': 'multipart/form-data' }
+  });
+
+  // myNodeRequest.post('/resources/img', formData)
+  // .then(response => {
+  //   console.log(response.data);
+  // })
+  // .catch(error => {
+  //   console.log(error);
+  // });
+
+};
+
 export const reqNodeSearchList = (keyWord) => {
   return myNodeRequest({
     url: "/resources/search",
