@@ -4,6 +4,11 @@
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
+    <b-navbar-nav>
+        <b-nav-item href="#">Iniciar Sesión</b-nav-item> 
+        <b-nav-item href="#">Registrarse</b-nav-item> 
+      </b-navbar-nav>
+
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">

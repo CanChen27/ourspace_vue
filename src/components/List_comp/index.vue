@@ -9,7 +9,8 @@
       >
         <b-card
           :title="item.nombre"
-          img-src="https://picsum.photos/600/300/?image=25"
+          :img-src="`http://localhost:8889/${item.img}`"
+        
           img-alt="Image"
           img-top
           tag="article"
@@ -19,7 +20,7 @@
           <b-card-text> {{ item.descripcion }} </b-card-text>
           <b-card-text> {{ item.precio }}€- hora </b-card-text>
 
-          <b-button variant="primary" @click="goDetails(item.id)">Go somewhere</b-button>
+          <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button>
         </b-card>
       </li>
 

@@ -6,6 +6,7 @@ import myMockRequest from "./apis/mockAjax";
 import myNodeRequest, {API_DEFAULT_PARAMS} from "./apis/node";
 
 export const reqNodeResourceList = () => {
+  console.log("Aqui");
   return myNodeRequest({ url: "/resources", method: "get" });
 };
 

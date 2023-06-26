@@ -6,14 +6,14 @@
     
     <Filter_comp></Filter_comp>
 
-    <div>
+    <!-- <div>
       <form>
         <label>Inserta imagen</label>
         <input type="file" alt="Submit" ref="file" name="ccc" v-on:change="handleFileUpload()"> 
         <button type="submit" :on-click="sendImg()">enviar</button>
       </form>
 
-    </div>
+    </div> -->
     <!-- router -->
     <router-view></router-view>
   </div>

@@ -20,16 +20,16 @@ export default new VueRouter({
       path: "/details",
       component: Details,
       name: "detailsName",
-      // meta: {
-      //   showFooter: false,
-      // },
+      meta: {
+        showFilter: false
+      },
     },
     {
       path: "/home",
       component: Home,
-      // meta: {
-      //   showFooter: false,
-      // },
+      meta: {
+        showFilter: true
+      },
     },
     {
       path: "/error",
@@ -75,6 +75,9 @@ export default new VueRouter({
     {
       path: "*",
       redirect: "/home",
+      meta: {
+        showFilter: true
+      },
     },
   ],
 });
