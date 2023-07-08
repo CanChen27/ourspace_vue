@@ -1,26 +1,26 @@
 //module que se encarga de la gestión de todas
 //las peticiones del proyecto
 
-import myRequest from "./apis/ajax";
+import myReq from "./apis/my";
 import myMockRequest from "./apis/mockAjax";
-import myNodeRequest, {API_DEFAULT_PARAMS} from "./apis/node";
+import apiReq, {API_DEFAULT_PARAMS} from "./apis/api";
 
 export const reqNodeResourceList = () => {
   console.log("Aqui");
-  return myNodeRequest({ url: "/resources", method: "get" });
+  return apiReq({ url: "/resources", method: "get" });
 };
 
 export const reqNodePostImg = (formData) => {
 
   console.log(">>cchen /api/index--formData", formData);
-  return myNodeRequest({ 
+  return apiReq({ 
     url: "/resources/img", 
     method: "post",
     data:formData,
     headers: { 'Content-Type': 'multipart/form-data' }
   });
 
-  // myNodeRequest.post('/resources/img', formData)
+  // apiReq.post('/resources/img', formData)
   // .then(response => {
   //   console.log(response.data);
   // })
@@ -31,7 +31,7 @@ export const reqNodePostImg = (formData) => {
 };
 
 export const reqNodeSearchList = (keyWord) => {
-  return myNodeRequest({
+  return apiReq({
     url: "/resources/search",
     method: "get",
         params: { keyWord },
@@ -40,18 +40,18 @@ export const reqNodeSearchList = (keyWord) => {
 };
 
 export const reqNodeDefaultFilterList = (keyWord) => {
-  // return myNodeRequest({
+  // return apiReq({
   //   url: "/resources/filter?keyWord=?",
   //   method: "get",
   //   params: { keyWord },
   // });
-//   return myNodeRequest.get('/resources/filter', {
+//   return apiReq.get('/resources/filter', {
 //     params: {
 //         maxResults: keyWord
 //     }
 // });
   console.log(keyWord)
-    return myNodeRequest.get('/resources/filter', {
+    return apiReq.get('/resources/filter', {
       params: {
         // spread the default params
         ...API_DEFAULT_PARAMS,
@@ -62,7 +62,7 @@ export const reqNodeDefaultFilterList = (keyWord) => {
 };
 
 export const reqNodeResourceDetails = (keyWord) => {
-  return myNodeRequest({
+  return apiReq({
     url: "/resources/details/info",
     method: "get",
     params: { keyWord },
@@ -70,7 +70,7 @@ export const reqNodeResourceDetails = (keyWord) => {
 };
 
 export const reqNodeResourceInfo = (keyWord) => {
-  return myNodeRequest({
+  return apiReq({
     url: "/resources/details/info",
     method: "get",
     params: { keyWord },
@@ -79,7 +79,7 @@ export const reqNodeResourceInfo = (keyWord) => {
 
 export const reqNodeResourceFacilities = (keyWord) => {
   console.log("reqNodeResourceFacilities:::", keyWord);
-  return myNodeRequest({
+  return apiReq({
     url: "/resources/details/facilities",
     method: "get",
     params: { keyWord },
@@ -87,7 +87,7 @@ export const reqNodeResourceFacilities = (keyWord) => {
 };
 
 export const reqNodeResourcePolitics = (keyWord) => {
-  return myNodeRequest({
+  return apiReq({
     url: "/resources/details/politics",
     method: "get",
     params: { keyWord },
@@ -101,7 +101,7 @@ export const reqNodeResourcePolitics = (keyWord) => {
 
 export const reqAjaxResourceList = () => {
   //axios devuelve un Promise
-  return myRequest({ url: '/search/users?q="test"', method: "get" });
+  return myReq({ url: '/search/users?q="test"', method: "get" });
 };
 
 export const reqMockResourceList = () => {
@@ -112,3 +112,54 @@ export const reqMockSearchData = () => {
   //axios devuelve un Promise
   return myMockRequest({ url: "/search_data", method: "get" });
 };
+
+//registro
+export const requserReg = (data) =>{
+  return apiReq({url: '/reguser', data, method: 'post'});
+}
+
+//iniciar sesión
+export const requserLogin = (data) =>{
+  return apiReq({url: '/login', data, method: 'post'});
+}
+
+
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+
+
+export const requserInfo = () =>{
+  return myReq({url:'/userInfo', method: 'get'});
+}
+
+export const requserLogout = () =>{
+  return myReq({url:'/logout', method: 'get'});
+}
+
+
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+
+export const reqmisProductos = () =>{
+  return myReq({url:'/admin/misProductos', method: 'get'});
+}
+
+export const reqcrearProducto = (data) =>{
+  return myReq({url:'/admin/crearProducto',data, method: 'post'});
+}
+
+export const reqeliminarProducto = (data) =>{
+  return myReq({url:'/admin/eliminarProducto',data, method: 'post'});
+}
+
+export const reqmodificarProducto = (data) =>{
+  return myReq({url:'/admin/modificarProducto',data, method: 'post'});
+}

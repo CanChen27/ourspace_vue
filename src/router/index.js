@@ -8,11 +8,12 @@ import Home from "@/pages/Home";
 import Error from "@/pages/Error";
 
 
+import Login from "@/pages/Login";
+import Register from "@/pages/Register";
+import Admin from "@/pages/Admin";
 // import List from "@/pages/List";
-// import Login from "@/pages/Login";
 // import Map from "@/pages/Map";
 // import ResourceInfo from "@/pages/ResourceInfo";
-// import Register from "@/pages/Register";
 
 export default new VueRouter({
   routes: [
@@ -43,20 +44,31 @@ export default new VueRouter({
     //     showFooter: false,
     //   },
     // },
-    // {
-    //   path: "/login",
-    //   component: Login,
-    //   meta: {
-    //     showFooter: true,
-    //   },
-    // },
-    // {
-    //   path: "/register",
-    //   component: Register,
-    //   meta: {
-    //     showFooter: true,
-    //   },
-    // },
+    {
+      path: "/login",
+      component: Login,
+      meta: {
+        showFooter: true,
+      },
+    },
+    {
+      path: "/register",
+      component: Register,
+      meta: {
+        showFooter: false,
+      },
+    },
+    {
+      path: "/admin",
+      component: Admin,
+      meta: {
+        showFooter: false,
+      },
+    },
+    {
+      path: '*',
+      redirect: '/login'
+    }
     // {
     //   path: "/map",
     //   component: Map,
@@ -71,13 +83,7 @@ export default new VueRouter({
     //     showFooter: true,
     //   },
     //   name: "resource_info",
-    // },
-    {
-      path: "*",
-      redirect: "/home",
-      meta: {
-        showFilter: true
-      },
-    },
+    // }, 
+
   ],
 });

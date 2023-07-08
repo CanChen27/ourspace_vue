@@ -6,11 +6,13 @@ import listAjaxData from "./listAjaxData";
 import listMockData from "./listMockData";
 import resourceListNodeData from "./resourceListNodeData";
 import detailsNodeData from "./resourceDetailsNodeData";
+import userNodeData from "./user";
 export default new Vuex.Store({
   modules: {
     listAjaxData,
     listMockData,
     resourceListNodeData,
     detailsNodeData,
+    userNodeData
   },
 });
