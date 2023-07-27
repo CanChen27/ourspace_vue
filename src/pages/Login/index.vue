@@ -32,6 +32,7 @@
 
 
       <b-button type="submit" variant="primary" @click.prevent="userLogin">Iniciar sesión</b-button> 
+      <router-link class="btn btn-secondary" to="/register">Register</router-link>
     </b-form> 
   </div>
 </template>
@@ -57,12 +58,16 @@ export default {
         const {username, password} = this.form;
         if(username && password){
           console.log("userLogin", this.form);
-          await this.$store.dispatch('userLog', this.form);
-          this.$router.push('/home');
+          let res = await this.$store.dispatch('userLog', this.form);
+          if(res.code == 200){
+            this.$router.push('/home');
+          }else if(res.code == 300){
+            alert(res.text);
+          }
         }else{
           console.log("faltan datos", this.form);
           
-        }
+        } 
       }
     }
 };

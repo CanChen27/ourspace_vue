@@ -13,6 +13,7 @@
       </div>
   
       <div class="col-9"> 
+        <Reservas_comp v-if="activeItem==1"></Reservas_comp>
         <Admin_comp v-if="activeItem==3"></Admin_comp> 
   
       </div>
@@ -24,6 +25,7 @@
 
 <script> 
 import Admin_comp from "@/components/Admin_comp"; 
+import Reservas_comp from "@/components/Reservas_comp"; 
 
 export default {
   name: "Admin_page",
@@ -41,6 +43,7 @@ export default {
   },
   components:{
     Admin_comp,
+    Reservas_comp,
   },
   methods:{
     toggleActive(id){

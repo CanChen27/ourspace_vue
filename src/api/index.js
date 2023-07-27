@@ -153,13 +153,50 @@ export const reqmisProductos = () =>{
 }
 
 export const reqcrearProducto = (data) =>{
-  return myReq({url:'/admin/crearProducto',data, method: 'post'});
+  return myReq({url:'/admin/crearProducto',data, method: 'post', headers: { 'Content-Type': 'multipart/form-data' }});
 }
 
 export const reqeliminarProducto = (data) =>{
   return myReq({url:'/admin/eliminarProducto',data, method: 'post'});
 }
 
-export const reqmodificarProducto = (data) =>{
+export const reqmodificarProducto = (data) =>{ 
   return myReq({url:'/admin/modificarProducto',data, method: 'post'});
+}
+
+export const reqgetNormas = () =>{ 
+  return myReq({url:'/admin/getNormas'});
+}
+
+
+export const reqgetComentarios = (data) =>{ 
+  return myReq({url:'/admin/getComentarios', params: data});
+}
+
+
+export const reqpublicarComentario = (data) =>{ 
+  return myReq({url:'/admin/publicarComentario', method:'post', data});
+}
+
+
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////
+export const reqNuevaReserva = (data) =>{ 
+  return myReq({url:'/reservas/newReserva',data, method: 'post'});
+}
+
+export const reqmisReservas = () =>{ 
+  return myReq({url:'/reservas/misReservas'});
+}
+
+export const reqmodificarReserva = (data) =>{ 
+  return myReq({url:'/reservas/modificarReserva', data, method:'post'});
+}
+
+export const reqcancelarReserva = (data) =>{ 
+  return myReq({url:'/reservas/cancelarReserva', data, method:'post'});
 }

@@ -3,13 +3,15 @@
     <div>
         <h1>{{ title }}</h1>
         <b-button v-b-modal.crearProductoModal variant="primary">Crear</b-button>
+        <div>
+  </div>
     </div>
     <div class="d-flex flex-wrap"> 
 
         <b-card 
             v-for="(item, index) in data" :key="item.idOferta"
             :title=item.nombre
-            :img-src="`http://localhost:8889/${item.img}`"
+            :img-src="`http://localhost:8889/${JSON.parse(item.img)[0]}`"
             img-alt="Image"
             img-top
             tag="article"
@@ -67,6 +69,26 @@
                     required
                     ></b-form-input>
                 </b-form-group> 
+
+                <b-form-file
+                    v-model="form.imagenes"
+                    :state="Boolean(form.imagenes)"
+                    placeholder="Choose a file or drop it here..."
+                    drop-placeholder="Drop file here..."
+                    multiple
+                    ></b-form-file> 
+
+                    <b-form-group id="input-group-6" label="Normas" label-for="input-2">
+                    <b-form-select v-model="form.normasSeleccionadas" :options="normas" multiple :select-size="normas.length" style="  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;"></b-form-select>
+                </b-form-group> 
+
+
+                <b-form-group id="input-group-7" label="Plazo de pago" aria-placeholder="Selecciona tipo de plazo" label-for="input-2">
+                    <b-form-select v-model="form.plazoOferta" :options="tipoPlazos"></b-form-select>
+                </b-form-group> 
+
             <div> 
                 <b-button type="reset" variant="danger">Limpiar</b-button>
                 <b-button type="submit" variant="primary">Crear</b-button>
@@ -117,6 +139,17 @@
                     required
                     ></b-form-input>
                 </b-form-group> 
+
+                <b-form-group id="input-group-6" label="Normas" label-for="input-2">
+                    <b-form-select v-model="modificarform.normasSeleccionadas" :options="normas" multiple :select-size="normas.length" style="  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;"></b-form-select>
+                </b-form-group> 
+
+
+                <b-form-group id="input-group-7" label="Plazo de pago" aria-placeholder="Selecciona tipo de plazo" label-for="input-2">
+                    <b-form-select v-model="modificarform.plazoOferta" :options="tipoPlazos"></b-form-select>
+                </b-form-group> 
             <div>  
                 <b-button type="submit" variant="primary" >Modificar</b-button>
             </div>
@@ -133,7 +166,7 @@
 </template>
   
 <script> 
-import { reqcrearProducto,reqeliminarProducto,  reqmodificarProducto } from "@/api";
+import { reqcrearProducto, reqeliminarProducto,  reqmodificarProducto } from "@/api";
 
 
 export default {
@@ -145,15 +178,28 @@ export default {
             form:{
                 nombre: '',
                 descripcion: '',
-                precio: 0
+                precio: 0,
+                imagenes:null,
+                normasSeleccionadas:[],  
+                plazoOferta: '', 
+
             },
             modificarform:{
                 nombre: '',
                 descripcion: '',
                 precio: 0, 
                 idOfertas: '',
+                normasSeleccionadas:[],  
+                plazoOferta: '', 
+
+
             },
-            showModificar: false,  
+            showModificar: false,
+            normas: [],
+            tipoPlazos:[
+                { value: 0, text: 'Corto plazo' },
+                { value: 1, text: 'Largo plazo' },
+            ]
         }
     },
     methods: { 
@@ -172,14 +218,36 @@ export default {
         onReset(event){
             event.preventDefault();
             console.log(">>reset");
-            this.form = { nombre: '', descripcion: '', precio: 0 };
+            this.form = {
+                nombre: '',
+                descripcion: '',
+                precio: 0, 
+                idOfertas: '',
+                normasSeleccionadas:null,
+                plazoOferta: '', 
+            };
         },
 
         async onSubmit(event){
-            event.preventDefault();
+            event.preventDefault(); 
 
-            let res = await reqcrearProducto(this.form);
-            console.log(">>onDelete:: ",res);
+            
+            const formData = new FormData();
+            formData.append('nombre', this.form.nombre);
+            formData.append('descripcion', this.form.descripcion);
+            formData.append('precio', this.form.precio); 
+
+            this.form.normasSeleccionadas.forEach((item, index) => {
+                formData.append(`normasSeleccionadas[${index}]`, item);
+            });
+            formData.append('plazoOferta', parseInt(this.form.plazoOferta, 10));
+            Array.from(this.form.imagenes).forEach((imagen) => {
+                formData.append('imagenes', imagen);
+            });
+
+            console.log(">>onSubmit form:: ",formData);
+            let res = await reqcrearProducto(formData);
+            console.log(">>onSubmit:: ",res);
             //si se ha guardado con éxito
             if(res.code == 200){
                 
@@ -201,7 +269,10 @@ export default {
             this.modificarform.nombre = this.$store.state.userNodeData.misProductos[id].nombre;
             this.modificarform.descripcion = this.$store.state.userNodeData.misProductos[id].descripcion;
             this.modificarform.precio = this.$store.state.userNodeData.misProductos[id].precio;
-            this.modificarform.idOfertas = this.$store.state.userNodeData.misProductos[id].idOfertas;
+            this.modificarform.idOfertas = this.$store.state.userNodeData.misProductos[id].idOfertas; 
+
+            this.modificarform.normasSeleccionadas = this.$store.state.userNodeData.misProductos[id].normas.length > 0 ? JSON.parse(this.$store.state.userNodeData.misProductos[id].normas ) : [];
+            this.modificarform.plazoOferta = this.$store.state.userNodeData.misProductos[id].plazoOferta;
             this.showModal();
         },
         async onUpdate(){ 
@@ -241,7 +312,7 @@ export default {
     },
     mounted(){ 
         this.cargarMisProductos();
-        
+        this.normas = this.$store.state.userNodeData.normas;
     }    
 }
 

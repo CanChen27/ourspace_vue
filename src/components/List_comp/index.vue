@@ -4,12 +4,12 @@
     <!-- {{ $store.state.resourceListNodeData.userListNode }} -->
     <ul class="d-flex align-items-center justify-content-between flex-wrap">
       <li
-        v-for="item in this.$store.state.resourceListNodeData.userListNode"
+        v-for="(item, idx) in this.$store.state.resourceListNodeData.userListNode"
         :key="item.id"
-      >
+      > 
         <b-card
           :title="item.nombre"
-          :img-src="`http://localhost:8889/${item.img}`"
+          :img-src="`http://localhost:8889/${JSON.parse(item.img)[0]}`"
         
           img-alt="Image"
           img-top
@@ -20,7 +20,8 @@
           <b-card-text> {{ item.descripcion }} </b-card-text>
           <b-card-text> {{ item.precio }}€- hora </b-card-text>
 
-          <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button>
+          <!-- <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button> -->
+          <router-link class="btn btn-primary" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Más información link</router-link>
         </b-card>
       </li>
 

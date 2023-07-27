@@ -38,6 +38,7 @@ export default {
   },
   async mounted(){
     await this.$store.dispatch('userInfo');
+    await this.$store.dispatch('getNormas');
   }
 };
 </script>
