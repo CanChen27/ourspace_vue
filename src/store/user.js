@@ -2,7 +2,7 @@
 //state: datos del store 
 
 // import { requserReg, requserLogin, requserInfo, requserLogout } from "@/api";
-import { requserReg, requserLogin, requserInfo, reqmisProductos, reqmisReservas, reqgetNormas } from "@/api";
+import { requserReg, requserLogin, requserInfo, reqmisProductos, reqmisReservas, reqgetNormas, reqlistaFavoritos, reqmisNotificaciones } from "@/api";
 
 const state = {
   token: localStorage.getItem('TOKEN'),
@@ -10,6 +10,8 @@ const state = {
   misProductos:JSON.parse(localStorage.getItem('MISPRODUCTOS')),
   misReservas:JSON.parse(localStorage.getItem('MISRESERVAS')),
   normas:JSON.parse(localStorage.getItem('GETNORMAS')),
+  favoritos: JSON.parse(localStorage.getItem('FAVORITOS')),
+  notificaciones: JSON.parse(localStorage.getItem('NOTIFICACIONES'))
 
 };
 //mutations una forma de modificar el state
@@ -30,6 +32,7 @@ const mutations = {
     localStorage.removeItem('USERINFO');
     localStorage.removeItem('MISPRODUCTOS');
     localStorage.removeItem('MISRESERVAS');
+    localStorage.removeItem('NOTIFICACIONES');
     localStorage.removeItem('GETNORMAS');
   },
   MISPRODUCTOS (state, misProductos){
@@ -37,6 +40,12 @@ const mutations = {
   },
   MISRESERVAS(state, misReservas){
     state.misReservas = misReservas;
+  },
+  FAVORITOS(state, favoritos){
+    state.favoritos = favoritos;
+  },
+  NOTIFICACIONES(state, notificaciones){
+    state.notificaciones = notificaciones
   },
   GETNORMAS(state, normas){
     state.normas = normas;
@@ -59,7 +68,7 @@ const actions = {
     console.log(">>userLog res",result); 
 
     //si se ha iniciado seción correctamente
-    if(result.code == 200){
+    if(result.status == 200){
       //guardar token
       commit('USERLOGIN', result.data.token);
 
@@ -67,12 +76,12 @@ const actions = {
       //para evitar perder los datos al refrescar
       localStorage.setItem("TOKEN", result.data.token);
       return {
-        code : 200,
+        status : 200,
         text : ''
       };
-    }else if(result.code == 300){
+    }else if(result.status == 300){
       return {
-        code : 300,
+        status : 300,
         text : 'Usuario contraseña incorrecto'
       };
     }
@@ -85,7 +94,7 @@ const actions = {
   async userInfo({commit}){
     let result = await requserInfo();
     console.log("userInfo store", result);
-    if(result.code == 200){ 
+    if(result.status == 200){ 
 
       commit('USERINFO', result.data);
       localStorage.setItem("USERINFO", JSON.stringify(result.data));
@@ -102,7 +111,7 @@ const actions = {
   async buscarMisProductos({commit}){
     let result = await reqmisProductos();
     console.log("buscarMisProductos store", result);
-    if(result.code == 200){
+    if(result.status == 200){
       commit('MISPRODUCTOS', result.data);
       localStorage.setItem("MISPRODUCTOS", JSON.stringify(result.data));
 
@@ -113,9 +122,29 @@ const actions = {
   async buscarMisReservas({commit}){
     let result = await reqmisReservas();
     console.log("buscarMisReservas store", result);
-    if(result.code == 200){
+    if(result.status == 200){
       commit('MISRESERVAS', result.data); 
       localStorage.setItem("MISRESERVAS", JSON.stringify(result.data));
+
+    }
+  },
+
+  async buscarFavoritos({commit}){
+    let result = await reqlistaFavoritos();
+    console.log("buscarFavitos store", result);
+    if(result.status == 200){
+      commit('FAVORITOS', result.data); 
+      localStorage.setItem("FAVORITOS", JSON.stringify(result.data));
+
+    }
+  },
+
+  async buscarNotificaciones({commit}){
+    let result = await reqmisNotificaciones();
+    console.log("buscarNotificaciones store", result);
+    if(result.status == 200){
+      commit('NOTIFICACIONES', result.data); 
+      localStorage.setItem("NOTIFICACIONES", JSON.stringify(result.data));
 
     }
   },
@@ -123,7 +152,7 @@ const actions = {
   async getNormas({commit}){
     let result = await reqgetNormas();
     console.log("getNormas store", result);
-    if(result.code == 200){
+    if(result.status == 200){
       commit('GETNORMAS', result.data); 
       localStorage.setItem("GETNORMAS", JSON.stringify(result.data));
 

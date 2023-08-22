@@ -7,18 +7,18 @@
         v-for="(item, idx) in this.$store.state.resourceListNodeData.userListNode"
         :key="item.id"
       > 
-        <b-card
-          :title="item.nombre"
-          :img-src="`http://localhost:8889/${JSON.parse(item.img)[0]}`"
-        
-          img-alt="Image"
-          img-top
-          tag="article"
-          style="max-width: 15rem"
-          class="mb-2"
-        >
+        <b-card >
+        <div class="image-container">
+          <b-card-img
+            :src="`http://localhost:8889/${JSON.parse(item.img)[0]}`" 
+            class="img-fluid fixed-size-image"
+          
+          ></b-card-img> 
+        </div>
+        <b-card-title> {{ item.nombre }} </b-card-title>
+
           <b-card-text> {{ item.descripcion }} </b-card-text>
-          <b-card-text> {{ item.precio }}€- hora </b-card-text>
+          <b-card-text> {{ item.precio }} monedas/hora </b-card-text>
 
           <!-- <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button> -->
           <router-link class="btn btn-primary" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Más información link</router-link>
@@ -36,7 +36,9 @@ export default {
   name: "List_comp",
   comments: { List_item_comp },
   data() {
-    return { list: [1] };
+    return { 
+      list: this.$store.state.resourceListNodeData.userListNode,
+    };
   },
   mounted() {
     console.log(">>", this);
@@ -57,4 +59,18 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+/* Estilos para asegurar que las imágenes mantengan su relación de aspecto */
+.image-container {
+  width: 300px;
+  height: 200px;
+  overflow: hidden;
+}
+
+/* Asegurar que la imagen ocupe todo el espacio disponible sin perder la relación de aspecto */
+.fixed-size-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>

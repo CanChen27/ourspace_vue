@@ -1,21 +1,11 @@
 <template>
   <div class="container">
     <!-- Content here -->
-    <Navbar_comp></Navbar_comp>
+    <Navbar_comp v-show="this.$route.meta.showHeader"></Navbar_comp>
 
-    
-
-
-    <!-- <div>
-      <form>
-        <label>Inserta imagen</label>
-        <input type="file" alt="Submit" ref="file" name="ccc" v-on:change="handleFileUpload()"> 
-        <button type="submit" :on-click="sendImg()">enviar</button>
-      </form>
-
-    </div> -->
-    <!-- router -->
     <router-view></router-view>
+
+
   </div>
 </template>
 
@@ -28,6 +18,9 @@ import Navbar_comp from "@/components/Navbar_comp";
 export default {
   name: "App",
   components: { Navbar_comp },
+  mounted(){
+    console.log("APP::", this.$route.meta);
+  }
 
 };
 </script>

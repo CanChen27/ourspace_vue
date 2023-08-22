@@ -69,11 +69,19 @@ export const reqNodeResourceDetails = (keyWord) => {
   });
 };
 
-export const reqNodeResourceInfo = (keyWord) => {
+// export const reqNodeResourceInfo = (keyWord) => {
+//   return apiReq({
+//     url: "/resources/details/info",
+//     method: "get",
+//     params: { keyWord },
+//   });
+// };
+
+export const reqNodeResourceComments = (idOferta) => {
   return apiReq({
-    url: "/resources/details/info",
+    url: "/resources/comentarios",
     method: "get",
-    params: { keyWord },
+    params: { idOferta },
   });
 };
 
@@ -86,13 +94,13 @@ export const reqNodeResourceFacilities = (keyWord) => {
   });
 };
 
-export const reqNodeResourcePolitics = (keyWord) => {
-  return apiReq({
-    url: "/resources/details/politics",
-    method: "get",
-    params: { keyWord },
-  });
-};
+// export const reqNodeResourcePolitics = (keyWord) => {
+//   return apiReq({
+//     url: "/resources/details/politics",
+//     method: "get",
+//     params: { keyWord },
+//   });
+// };
 ///////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////
@@ -167,12 +175,7 @@ export const reqmodificarProducto = (data) =>{
 export const reqgetNormas = () =>{ 
   return myReq({url:'/admin/getNormas'});
 }
-
-
-export const reqgetComentarios = (data) =>{ 
-  return myReq({url:'/admin/getComentarios', params: data});
-}
-
+ 
 
 export const reqpublicarComentario = (data) =>{ 
   return myReq({url:'/admin/publicarComentario', method:'post', data});
@@ -199,4 +202,26 @@ export const reqmodificarReserva = (data) =>{
 
 export const reqcancelarReserva = (data) =>{ 
   return myReq({url:'/reservas/cancelarReserva', data, method:'post'});
+}
+
+export const reqaniadirFavorito = (data) =>{ 
+  return myReq({url:'/favoritos/aniadirFavorito', data, method:'post'});
+}
+
+export const reqquitarFavorito = (data) =>{ 
+  return myReq({url:'/favoritos/quitarFavorito', data, method:'post'});
+}
+
+export const reqconsultarFavorito = (idOferta) =>{ 
+  return myReq({url:'/favoritos/consultarFavorito', params: { idOferta }, method:'get'});
+}
+
+export const reqlistaFavoritos = () =>{ 
+  return myReq({url:'/favoritos/listaFavoritos', method:'get'});
+}
+
+
+
+export const reqmisNotificaciones = () =>{ 
+  return myReq({url:'/notificaciones/misNotificaciones', method:'get'});
 }

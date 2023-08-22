@@ -22,6 +22,7 @@ export default new VueRouter({
       component: Details,
       name: "detailsName",
       meta: {
+        showHeader: true,
         showFilter: false
       },
     },
@@ -29,6 +30,7 @@ export default new VueRouter({
       path: "/home",
       component: Home,
       meta: {
+        showHeader: true,
         showFilter: true
       },
     },
@@ -48,7 +50,8 @@ export default new VueRouter({
       path: "/login",
       component: Login,
       meta: {
-        showFooter: true,
+        showFooter: false,
+        showHeader: false,
       },
     },
     {
@@ -56,12 +59,14 @@ export default new VueRouter({
       component: Register,
       meta: {
         showFooter: false,
+        showHeader: false,
       },
     },
     {
       path: "/admin",
       component: Admin,
       meta: {
+        showHeader: true,
         showFooter: false,
       },
     },

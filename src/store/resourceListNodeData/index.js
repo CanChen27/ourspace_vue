@@ -24,8 +24,11 @@ const actions = {
   async getNodeUsersData(context) {
     // console.log(">>actions::getUsersData");
     let result = await reqNodeResourceList();
-    console.log("Esto funciona", result);
-    context.commit("GET_NODE_USERS_DATA", result.message.data);
+    if(result.status == 200){
+      console.log("Esto funciona", result);
+      context.commit("GET_NODE_USERS_DATA", result.data);
+
+    }
   },
   async filterNodeUsersData(context, keyWord) {
     console.log(">>actions::filterNodeUsersData");

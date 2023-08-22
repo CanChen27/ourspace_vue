@@ -4,6 +4,15 @@
     <div> 
   </div>
     <h5 class="row">Detalles del producto: {{ productoInfo.nombre }}</h5>
+    <b-form-checkbox
+      id="checkbox-1"
+      v-model="aniadirFavorito"
+      name="checkbox-1"
+      value="1"
+      unchecked-value="0"
+    >
+      Añadir Favorito
+    </b-form-checkbox>
     <div class="">
       <b-carousel
       id="carousel-1"
@@ -62,39 +71,10 @@
         <hr/>
         <h5>Normas</h5>
         <div class="row d-flex">
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
+          <b-card v-for="(norma, idx) in this.productoInfo.normas" :key="idx">
+            <b-card-text>{{ $store.state.userNodeData.normas[norma].text }}</b-card-text>
           </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
+
         </div>
         <hr/>
         <h5>Comentarios</h5>
@@ -118,39 +98,12 @@
         </div>
         <div class="row">
 
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
+          <b-card v-for="(comentario, idx) in this.comentariolist" :key="idx">
+            <b-card-title>{{ comentario.nombreUsuario }}</b-card-title>
+            <b-card-text>{{ comentario.text }}</b-card-text>
+            <b-card-text>{{ comentario.fecha }} </b-card-text>
           </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
-          <b-card >
-            <b-card-text>Lorem ipsum dolor sit amet, consectetur a.</b-card-text>
-          </b-card>
+
         </div>
       </div>
       <div class="col-4 stiky-top"> 
@@ -194,7 +147,7 @@
         </b-card>
 
         <b-card
-          :title="`${precio}€/hora`"
+          :title="`${precio}modenas/hora`"
           tag="article"
           style="max-width: 20rem;"
           class="mb-2 stiky-element"
@@ -216,7 +169,7 @@
 // import Filter_comp from "@/components/Filter_comp";
 // import List_comp from "@/components/List_comp";
 
-import {reqNuevaReserva, reqgetComentarios, reqpublicarComentario} from "@/api/index"
+import {reqNuevaReserva, reqpublicarComentario, reqNodeResourceComments, reqaniadirFavorito, reqquitarFavorito, reqconsultarFavorito} from "@/api/index"
 const { v4: uuidv4 } = require('uuid');
 
 export default {
@@ -249,6 +202,7 @@ export default {
       productoInfo: {},
       comentario:'',
       comentariolist:[],
+      aniadirFavorito: "0",
     };
   },
   methods: {
@@ -282,7 +236,7 @@ export default {
         this.reservarForm.uuid = uid;
         let res = await reqNuevaReserva(this.reservarForm);
         console.log(">>onSubmit", res);
-        if(res.code == 200){
+        if(res.status == 200){
           this.makeToast("Éxito", `Se ha realizado la reserva del producto de forma exitosa`);
           this.limpiarReservaForm();
         }
@@ -297,7 +251,7 @@ export default {
           'text': this.comentario,
         })
         console.log(">>onSubmitComentario", res);
-        if(res.code == 200){
+        if(res.status == 200){
           this.cargarComentarios();
         }
 
@@ -335,23 +289,62 @@ export default {
         this.comentario = '';
       }, 
       async cargarComentarios(){
-        let res = await reqgetComentarios({'idOferta': this.idOferta});
-        console.log("cargarMisProductos", res);
-        if(res.code == 200){
+        let res = await reqNodeResourceComments(this.idOferta);
+        console.log("cargarComentarios", res);
+        if(res.status == 200){
           this.comentariolist = res.data;
-        }else if(res.code == 201){
+        }else if(res.status == 201){
           this.comentariolist = [];
         } 
+      },
+      async handleFavoritoChange(newValue){
+        let res;
+        if(newValue == "1")
+           res = await reqaniadirFavorito({idOferta: this.idOferta});
+
+        else if(newValue == "0")
+           res = await reqquitarFavorito({idOferta: this.idOferta});
+
+        console.log("handleFavoritoChange", res);
+        if(res.status == 200){
+          alert(res.message);
+        }
+        // else{
+        //   alert("Error: handleFavoritoChange status diferente a 200")
+        // }
+      },
+      async setFavorito(){
+        let res = await reqconsultarFavorito(this.idOferta);
+        console.log("setFavorito", res);
+        if(res.status == 200){
+          this.aniadirFavorito = "1";
+        } 
+      }
+    },  
+    watch: {
+      aniadirFavorito(newValue, oldValue) {
+        // Este watcher se activará cuando myVariable cambie
+        this.handleFavoritoChange(newValue, oldValue);
       }
     },
-    mounted(){
-      console.log(">>mounted  id", this.$route);
+    beforeMount(){
+      console.log(">>beforeMount");
+
       let productoId= this.$route.query.id;
-      let productoIdx= this.$route.query.idx;
+      // let productoIdx= this.$route.query.idx;
       this.idOferta = productoId;
       this.reservarForm.id = productoId;
-      this.productoInfo = this.$store.state.resourceListNodeData.userListNode[productoIdx];
+      this.productoInfo = this.$store.state.resourceListNodeData.userListNode.find(resource => resource.idOfertas == productoId);
+      console.log("productoInfo", this.productoInfo)
       this.cargarComentarios();
+  
+      if(this.productoInfo.normas.length>0)
+        this.productoInfo.normas = JSON.parse(this.productoInfo.normas);
+      this.setFavorito();
+      
+    },
+    mounted(){
+      console.log(">>mounted");
 
     }
 };
