@@ -1,11 +1,11 @@
 <template>
 <div>
     <div>
-        <h1>{{ title }}</h1>
-        <b-card v-for="(notificacion, idx) in this.notificaciones" :key="idx">
-            <b-card-text>{{ notificacion.mensaje }}</b-card-text>
-            <b-card-text>{{ notificacion.fecha }}</b-card-text> 
-        </b-card>
+        <h4 class="mb-4">{{ title }}</h4>
+        <div class=" border-2 border-bottom my-3" v-for="(notificacion, idx) in this.notificaciones" :key="idx">
+            <p>{{ notificacion.mensaje }}</p>
+            <p class="text-right text-secondary">{{ notificacion.fecha }}</p>  
+        </div>
  
     </div>
 </div>

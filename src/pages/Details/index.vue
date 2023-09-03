@@ -1,18 +1,24 @@
 <template>
   <div class="container">
-    <!-- Content here --> 
-    <div> 
-  </div>
-    <h5 class="row">Detalles del producto: {{ productoInfo.nombre }}</h5>
-    <b-form-checkbox
-      id="checkbox-1"
-      v-model="aniadirFavorito"
-      name="checkbox-1"
-      value="1"
-      unchecked-value="0"
-    >
-      Añadir Favorito
-    </b-form-checkbox>
+    <!-- Content here -->  
+    
+    <div class="d-flex align-item-center row">
+      <h5 class="col font-weight-bold">Detalles del producto: {{ productoInfo.nombre }}</h5>  
+      
+    </div>
+    <div class="row mb-2">
+      <div class="d-flex align-items-center justify-content-end col">
+        <div @click="favoritoSwitch" class="ml-5 ">
+          <font-awesome-icon v-show="aniadirFavorito==='0'" icon="heart" size="xl" style="color: gray;" />
+          <font-awesome-icon v-show="aniadirFavorito==='1'" icon="fa-solid fa-heart" size="xl" style="color: #ff8080;" />
+        </div>
+        <p class="mb-0 ml-2">Guardar</p>
+
+      </div>
+
+    </div>
+    
+  
     <div class="">
       <b-carousel
       id="carousel-1"
@@ -28,7 +34,7 @@
       @sliding-end="onSlideEnd"
     >
   
- 
+
       <!-- Slides with img slot -->
       <!-- Note the classes .d-block and .img-fluid to prevent browser default image alignment -->
       <b-carousel-slide v-for="(item, key) in JSON.parse(productoInfo.img)" :key="key" >
@@ -43,7 +49,7 @@
           >
         </template>
       </b-carousel-slide>
- 
+
     </b-carousel>
 
     <!-- <p class="mt-4">
@@ -56,10 +62,14 @@
       <div class="col-8">
         <div class="row">
           <div class="col-12 d-flex justify-content-between">
-            <h5>Arrendador:  {{ productoInfo.idArrendador }}</h5>
-            <h5>Valoración</h5>
+            <h5>Arrendador:  {{ productoInfo.organizacion }}</h5> 
+          </div> 
 
-          </div>
+        </div>
+
+        <hr/>
+        <div class="row">
+          
           <div class="col-12">
             <h5>Descripción de la oferta</h5>
             <p>
@@ -69,93 +79,301 @@
           </div>
         </div>
         <hr/>
-        <h5>Normas</h5>
-        <div class="row d-flex">
-          <b-card v-for="(norma, idx) in this.productoInfo.normas" :key="idx">
-            <b-card-text>{{ $store.state.userNodeData.normas[norma].text }}</b-card-text>
-          </b-card>
+        <div>
+          <h5>Normas</h5>
+          <div class="row d-flex">
+            <div class ="col-12 ml-2 d-flex align-items-start" v-for="(norma, idx) in this.productoInfo.normas" :key="idx">
+              <font-awesome-icon icon="fa-solid fa-flag" />
+              <p class="ml-3">{{ $store.state.userNodeData.normas[norma].text }}</p>
+            </div>
+  
+          </div>
 
         </div>
         <hr/>
         <h5>Comentarios</h5>
         <div class="col-12"> 
           <b-form @submit="onSubmitComentario" @reset="onResetComentario" v-if="show" class="row">
-            <div class="col-10">
+            <div class="col-10 pl-0">
               <b-form-textarea
                 id="textarea"
                 v-model="comentario"
-                placeholder="Enter something..."
+                placeholder="Escribe un comentario"
                 rows="3"
                 max-rows="6"
               ></b-form-textarea>
             </div>
             <div class="col-2">
-              <b-button type="submit" variant="primary">Publicar comentario</b-button>
+              <b-button size="sm" type="submit" variant="primary">Publicar comentario</b-button>
             </div>
 
           </b-form>
- 
+
         </div>
         <div class="row">
 
-          <b-card v-for="(comentario, idx) in this.comentariolist" :key="idx">
-            <b-card-title>{{ comentario.nombreUsuario }}</b-card-title>
-            <b-card-text>{{ comentario.text }}</b-card-text>
-            <b-card-text>{{ comentario.fecha }} </b-card-text>
-          </b-card>
+          <div class="col-12 m-3" v-for="(comentario, idx) in this.comentariolist" :key="idx">
+            <div  class="mb-2">
+              <p class="m-0 font-weight-bold" >{{ comentario.nombreUsuario }}</p>
+              <p class="m-0" style="font-size: 12px; color:#888">{{ comentario.fecha }} </p>
+
+            </div>
+            <p style="font-size: 14px;">{{ comentario.text }}</p>
+          </div>
 
         </div>
       </div>
-      <div class="col-4 stiky-top"> 
-        <b-card
-          :title="`${productoInfo.precio} monedas/hora`"
+      <div class="col-4  "> 
+
+        <div v-if="listaCompartir">
+          <b-card
+          :title="`${productoInfo.precio} monedas/persona la hora`"
           tag="article"
           style="max-width: 20rem;"
-          class="mb-2 stiky-element"
+          class="mb-2 stiky-element shadow p-3 mb-5 bg-white rounded"
           v-if="productoInfo.plazoOferta == 0"
         >
           <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
             <b-form-group id="input-group-1">
               <label for="example-datepicker">Fecha</label>
-              <b-form-datepicker id="example-datepicker" v-model="reservarForm.dia" class="mb-2"></b-form-datepicker>
+              <b-form-datepicker id="example-datepicker" v-model="reservarForm.dia" class="mb-2" placeholder="Elige una fecha"></b-form-datepicker>
             </b-form-group>
 
 
             <b-form-group id="input-group-2"> 
-              <b-form-timepicker v-model="reservarForm.hora" locale="en"></b-form-timepicker> 
+              <b-form-timepicker v-model="reservarForm.hora" locale="es" placeholder="Elige una hora"></b-form-timepicker> 
             </b-form-group>
 
-            <b-form-group id="input-group-3" label="Compartir:" label-for="input-3">
+            <b-form-group id="input-group-3" label="Opción de reserva:" label-for="input-3">
               <b-form-select
                 id="input-3"
                 v-model="reservarForm.buscarCompartir"
                 :options="share" 
-                required
+                required 
               ></b-form-select>
             </b-form-group>
 
             <b-form-group id="input-group-4" v-if="reservarForm.buscarCompartir == 'Buscar gente'"> 
-              <b-form-input type="number" v-model="reservarForm.genteCompartir"></b-form-input>
-            </b-form-group>
+              <label for="example-datepicker">Número de colaboradores a buscar:</label>
+              <div class="d-flex align-items-center justify-content-center">
+                <b-form-input class="mr-3" type="number" v-model="reservarForm.genteCompartir" min="1" :max="productoInfo.genteCompartir -1"></b-form-input>
+                <span class=" " >/{{ productoInfo.genteCompartir -1 }}  </span> 
+              </div>
+            </b-form-group> 
+
+            <label class="font-weight-bold">En total</label>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+
+            <hr/>
+            <label class="font-weight-bold">A pagar</label>
             
-            <div >
-              <b-button type="submit" variant="primary">Reservar</b-button>
+            <div v-if="reservarForm.buscarCompartir == 'Buscar gente'" class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  ( productoInfo.genteCompartir - reservarForm.genteCompartir)}} personas</div>
+              <div>{{ productoInfo.precio * ( productoInfo.genteCompartir - reservarForm.genteCompartir)  }} monedas</div>
+            </div>
+            <div v-else  class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.genteCompartir}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.genteCompartir }} monedas</div>
+            </div>
+            
+
+            <div class=" d-flex align-items-center">
+              <b-button type="submit" variant="primary" class="col-12">Reservar</b-button>
             </div>
           </b-form>
-       
-        </b-card>
+      
+          </b-card>
+          <b-card
+            :title="`${productoInfo.precio} monedas/persona por día`"
+            tag="article"
+            style="max-width: 20rem;"
+            class="mb-2 stiky-element shadow p-3 mb-5 bg-white rounded"
+            v-else
+          >
+            <b-form @submit="onSubmit" @reset="onReset" v-if="show">
 
+              <b-form-group id="input-group-1">
+                <label for="example-datepicker">Fecha</label>
+                <b-form-datepicker id="example-datepicker" v-model="reservarForm.dia" class="mb-2" placeholder="Elige una fecha"></b-form-datepicker>
+              </b-form-group>
+
+
+              <b-form-group id="input-group-2"> 
+                <b-form-timepicker v-model="reservarForm.hora" locale="es" placeholder="Elige una hora"></b-form-timepicker> 
+              </b-form-group>
+
+              <b-form-group id="input-group-3" label="Opción de reserva:" label-for="input-3">
+                <b-form-select
+                  id="input-3"
+                  v-model="reservarForm.buscarCompartir"
+                  :options="share" 
+                  required 
+                ></b-form-select>
+              </b-form-group>
+
+              <b-form-group id="input-group-4" v-if="reservarForm.buscarCompartir == 'Buscar gente'"> 
+              <label for="example-datepicker">Número de colaboradores a buscar:</label>
+              <div class="d-flex align-items-center justify-content-center">
+                <b-form-input class="mr-3" type="number" v-model="reservarForm.genteCompartir" min="1" :max="productoInfo.genteCompartir -1"></b-form-input>
+                <span class=" " >/{{ productoInfo.genteCompartir -1 }}  </span> 
+              </div>
+            </b-form-group> 
+
+            <label class="font-weight-bold">En total</label>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+
+            <hr/>
+            <label class="font-weight-bold">A pagar</label>
+            
+            <div v-if="reservarForm.buscarCompartir == 'Buscar gente'" class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  ( productoInfo.genteCompartir - reservarForm.genteCompartir)}} personas</div>
+              <div>{{ productoInfo.precio * ( productoInfo.genteCompartir - reservarForm.genteCompartir)  }} monedas</div>
+            </div>
+            <div v-else  class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.genteCompartir}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.genteCompartir }} monedas</div>
+            </div>
+              
+
+              <div class=" d-flex align-items-center">
+                <b-button type="submit" variant="primary" class="col-12">Reservar</b-button>
+              </div>
+            </b-form>
+        
+          </b-card>
+        </div>
+        <div v-else>
         <b-card
-          :title="`${precio}modenas/hora`"
+          :title="`${productoInfo.precio} monedas/persona la hora`"
           tag="article"
           style="max-width: 20rem;"
-          class="mb-2 stiky-element"
+          class="mb-2 stiky-element shadow p-3 mb-5 bg-white rounded"
+          v-if="productoInfo.plazoOferta == 0"
+        >
+          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+
+            <b-form-group id="input-group-1">
+              <label for="example-datepicker">Fecha</label>
+              <b-form-datepicker id="example-datepicker" v-model="reservarForm.dia" class="mb-2" placeholder="Elige una fecha"></b-form-datepicker>
+            </b-form-group>
+
+
+            <b-form-group id="input-group-2"> 
+              <b-form-timepicker v-model="reservarForm.hora" locale="es" placeholder="Elige una hora"></b-form-timepicker> 
+            </b-form-group>
+
+            <b-form-group id="input-group-3" label="Opción de reserva:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="reservarForm.buscarCompartir"
+                :options="share" 
+                required 
+              ></b-form-select>
+            </b-form-group>
+
+            <b-form-group id="input-group-4" v-if="reservarForm.buscarCompartir == 'Buscar gente'"> 
+              <label for="example-datepicker">Número de colaboradores a buscar:</label>
+              <div class="d-flex align-items-center justify-content-center">
+                <b-form-input class="mr-3" type="number" v-model="reservarForm.genteCompartir" min="1" :max="productoInfo.nArrendatarios -1"></b-form-input>
+                <span class=" " >/{{ productoInfo.nArrendatarios -1 }}  </span> 
+              </div>
+            </b-form-group> 
+
+            <label class="font-weight-bold">En total</label>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+
+            <hr/>
+            <label class="font-weight-bold">A pagar</label>
+            
+            <div v-if="reservarForm.buscarCompartir == 'Buscar gente'" class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  ( productoInfo.nArrendatarios - reservarForm.genteCompartir)}} personas</div>
+              <div>{{ productoInfo.precio * ( productoInfo.nArrendatarios - reservarForm.genteCompartir)  }} monedas</div>
+            </div>
+            <div v-else  class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+            
+
+            <div class=" d-flex align-items-center">
+              <b-button type="submit" variant="primary" class="col-12">Reservar</b-button>
+            </div>
+          </b-form>
+      
+        </b-card>
+        <b-card
+          :title="`${productoInfo.precio} monedas/persona por día`"
+          tag="article"
+          style="max-width: 20rem;"
+          class="mb-2 stiky-element shadow p-3 mb-5 bg-white rounded"
           v-else
         >
- 
-       
+          <b-form @submit="onSubmit" @reset="onReset" v-if="show">
+
+            <b-form-group id="input-group-1">
+              <label for="example-datepicker">Fecha</label>
+              <b-form-datepicker id="example-datepicker" v-model="reservarForm.dia" class="mb-2" placeholder="Elige una fecha"></b-form-datepicker>
+            </b-form-group>
+
+
+            <b-form-group id="input-group-2"> 
+              <b-form-timepicker v-model="reservarForm.hora" locale="es" placeholder="Elige una hora"></b-form-timepicker> 
+            </b-form-group>
+
+            <b-form-group id="input-group-3" label="Opción de reserva:" label-for="input-3">
+              <b-form-select
+                id="input-3"
+                v-model="reservarForm.buscarCompartir"
+                :options="share" 
+                required 
+              ></b-form-select>
+            </b-form-group>
+
+            <b-form-group id="input-group-4" v-if="reservarForm.buscarCompartir == 'Buscar gente'"> 
+              <label for="example-datepicker">Número de colaboradores a buscar:</label>
+              <div class="d-flex align-items-center justify-content-center">
+                <b-form-input class="mr-3" type="number" v-model="reservarForm.genteCompartir" min="1" :max="productoInfo.nArrendatarios -1"></b-form-input>
+                <span class=" " >/{{ productoInfo.nArrendatarios -1 }}  </span> 
+              </div>
+            </b-form-group> 
+
+            <label class="font-weight-bold">En total</label>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+
+            <hr/>
+            <label class="font-weight-bold">A pagar</label>
+            
+            <div v-if="reservarForm.buscarCompartir == 'Buscar gente'" class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  ( productoInfo.nArrendatarios - reservarForm.genteCompartir)}} personas</div>
+              <div>{{ productoInfo.precio * ( productoInfo.nArrendatarios - reservarForm.genteCompartir)  }} monedas</div>
+            </div>
+            <div v-else  class="d-flex align-items-center justify-content-between mb-3">
+              <div>{{ productoInfo.precio }} x {{  productoInfo.nArrendatarios}} personas</div>
+              <div>{{ productoInfo.precio * productoInfo.nArrendatarios }} monedas</div>
+            </div>
+            
+
+            <div class=" d-flex align-items-center">
+              <b-button type="submit" variant="primary" class="col-12">Reservar</b-button>
+            </div>
+          </b-form>
+      
         </b-card>
+        </div>
+
         <div>
 </div>
       </div>
@@ -196,13 +414,15 @@ export default {
         dia: '',
         hora: '',
         buscarCompartir: false,
-        genteCompartir: false,
+        genteCompartir: 0,
         id:'',
       },
       productoInfo: {},
       comentario:'',
       comentariolist:[],
       aniadirFavorito: "0",
+      isChecked: true,
+      listaCompartir : false,
     };
   },
   methods: {
@@ -299,11 +519,16 @@ export default {
       },
       async handleFavoritoChange(newValue){
         let res;
-        if(newValue == "1")
-           res = await reqaniadirFavorito({idOferta: this.idOferta});
+        if(newValue == "1"){
+          res = await reqaniadirFavorito({idOferta: this.idOferta});
+          this.$("#heart").css("color: #ff6b6b;")
 
-        else if(newValue == "0")
-           res = await reqquitarFavorito({idOferta: this.idOferta});
+        }
+
+        else if(newValue == "0"){
+          res = await reqquitarFavorito({idOferta: this.idOferta});
+
+        }
 
         console.log("handleFavoritoChange", res);
         if(res.status == 200){
@@ -319,6 +544,14 @@ export default {
         if(res.status == 200){
           this.aniadirFavorito = "1";
         } 
+      },
+      favoritoSwitch(){
+        if(this.aniadirFavorito === "1"){
+          this.aniadirFavorito = "0"
+        }else{
+          this.aniadirFavorito = "1"
+
+        }
       }
     },  
     watch: {
@@ -341,6 +574,26 @@ export default {
       if(this.productoInfo.normas.length>0)
         this.productoInfo.normas = JSON.parse(this.productoInfo.normas);
       this.setFavorito();
+
+      //para reutilizar la página pages
+      //en caso de que sea una reserva en modo compartir
+      if('compartir' in this.productoInfo){
+        this.listaCompartir = true;
+        this.reservarForm.dia = this.productoInfo.fecha;
+        this.reservarForm.hora = this.productoInfo.hora;
+        this.reservarForm.genteCompartir = this.productoInfo.genteCompartir;
+        this.reservarForm.buscarCompartir =   'Buscar gente';
+
+      }else{
+        this.listaCompartir = false
+      }
+
+
+            // dia: '',
+      //   hora: '',
+      //   buscarCompartir: false,
+      //   genteCompartir: 0,
+      //   id:'',
       
     },
     mounted(){
@@ -351,11 +604,7 @@ export default {
 </script>
 
 <style>
-
-
-.cont {
-  position: relative;
-}
+ 
 
 .stiky-element {
   position: sticky;

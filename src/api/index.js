@@ -3,7 +3,7 @@
 
 import myReq from "./apis/my";
 import myMockRequest from "./apis/mockAjax";
-import apiReq, {API_DEFAULT_PARAMS} from "./apis/api";
+import apiReq from "./apis/api";
 
 export const reqNodeResourceList = () => {
   console.log("Aqui");
@@ -38,28 +38,25 @@ export const reqNodeSearchList = (keyWord) => {
 
   });
 };
+ 
 
-export const reqNodeDefaultFilterList = (keyWord) => {
-  // return apiReq({
-  //   url: "/resources/filter?keyWord=?",
-  //   method: "get",
-  //   params: { keyWord },
-  // });
-//   return apiReq.get('/resources/filter', {
-//     params: {
-//         maxResults: keyWord
-//     }
-// });
-  console.log(keyWord)
-    return apiReq.get('/resources/filter', {
-      params: {
-        // spread the default params
-        ...API_DEFAULT_PARAMS,
-        // add your own parameters here
-        type: 1,
-      }
-    });
-};
+export const reqfilterTipoList = (tipo) =>{
+  let str = `/resources/filterTipo?tipo=${tipo}`;
+  console.log("reqfilterTipoList url", str)
+  return apiReq({url: str, method: 'get'});
+}
+
+export const reqfilterPeriodoList = (tipo) =>{
+  let str = `/resources/filterPeriodo?tipo=${tipo}`;
+  console.log("reqfilterPeriodoList url", str)
+  return apiReq({url: str, method: 'get'});
+}
+
+export const reqlistaCompartir = () =>{
+  let str = `/resources/listaCompartir`;
+  console.log("reqlistaCompartir url");
+  return apiReq({url: str, method: 'get'});
+}
 
 export const reqNodeResourceDetails = (keyWord) => {
   return apiReq({
@@ -149,6 +146,25 @@ export const requserLogout = () =>{
 }
 
 
+
+
+export const reqrootUsuarios = () =>{
+  return myReq({url:'/root', method: 'get'});
+}
+
+
+export const reqeliminarUsuario = (id) =>{
+  return myReq({url:'/root/eliminarUsuario',data: id, method: 'post'});
+}
+
+
+export const reqaniadirRol = (data) =>{
+  return myReq({url:'/root/aniadirRol',data: data, method: 'post'});
+}
+
+export const reqquitarRol = (data) =>{
+  return myReq({url:'/root/quitarRol',data: data, method: 'post'});
+}
 
 ///////////////////////////////////////////////////////////////
 

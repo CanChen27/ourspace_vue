@@ -18,6 +18,7 @@
               type="text"
               placeholder="Introduce nombre del usuario"
               required
+              :state="usernameState"
               
             ></b-form-input>
           </b-form-group>
@@ -31,6 +32,7 @@
               placeholder="Introduce la contraseña"
               type="password" 
               required
+              :state="passwordState"
               
             ></b-form-input>
           </b-form-group>
@@ -60,7 +62,9 @@ export default {
           username:'', 
           password: '',  
         }, 
-        show: true
+        show: true,
+        usernameState: null,
+        passwordState: null,
       }
     },
     methods: { 
@@ -69,14 +73,40 @@ export default {
         const {username, password} = this.form;
         if(username && password){
           console.log("userLogin", this.form);
+          this.usernameState = true;
+          this.passwordState = true;
+
+
           let res = await this.$store.dispatch('userLog', this.form);
           if(res.status == 200){
-            this.$router.push('/home');
+            if(username == 'root'){
+
+              this.$router.push('/root');
+            }
+            else{
+              this.$router.push('/home');
+
+            }
           }else if(res.status == 300){
             alert(res.text);
+            this.usernameState = false;
+            this.passwordState = false;
+          }else if(res.status == 1){
+            alert(res.text);
+            this.usernameState = false;
+            this.passwordState = false;
+
           }
         }else{
           console.log("faltan datos", this.form);
+          if(username.length < 1){
+            this.passwordState = null;
+            this.usernameState = false;
+          }
+          if(password.length < 1){
+            this.usernameState = null;
+            this.passwordState = false;
+          }
           
         } 
       }

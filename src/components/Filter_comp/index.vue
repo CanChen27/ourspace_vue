@@ -1,42 +1,66 @@
 <template>
   <b-container class="my-3">
     <!-- Content here -->
-
+    <i class="bi bi-heart"></i>
     <ul class="d-flex align-item-center justify-content-around">
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filter(1)">
-          <font-awesome-icon icon="fa-solid fa-house" />
-          <label for="">House</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroPeriodo(0)" >
+          <font-awesome-icon icon="fa-solid fa-calendar-day" />
+          <label>Corto Plazo</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column">
-          <font-awesome-icon icon="hat-wizard" />
-          <label>Hat Wizard</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroPeriodo(1)">
+          <font-awesome-icon icon="fa-solid fa-calendar-days" />
+          <label for="">Largo Plazo</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column">
-          <font-awesome-icon icon="fa-solid fa-lock" />
-          <label>Lock</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="listaCompartir">
+          <font-awesome-icon icon="fa-solid fa-people-roof" />
+          <label>Compartir</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column">
-          <font-awesome-icon icon="fa-solid fa-wifi" />
-          <label>Wifi</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(1)">
+          <font-awesome-icon icon="fa-solid fa-table-tennis-paddle-ball" />
+          <label>Tenis</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column">
-          <font-awesome-icon icon="fa-solid fa-tree" />
-          <label>Tree</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(2)">
+          <font-awesome-icon icon="fa-solid fa-futbol" />
+          <label>Futol</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
-        <div class="filterBtn d-flex align-items-center flex-column">
-          <font-awesome-icon icon="fa-solid fa-globe" />
-          <label>Globe</label>
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(3)">
+          <font-awesome-icon icon="fa-solid fa-basketball" />
+          <label>Baloncesto</label>
+        </div>
+      </li>
+      <li class="" style="height: 6vh;">
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(4)">
+          <font-awesome-icon icon="fa-solid fa-football" />
+          <label>Rugby</label>
+        </div>
+      </li>
+      <li class="" style="height: 6vh;">
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(5)">
+          <font-awesome-icon icon="fa-solid fa-person-swimming" />
+          <label>Piscinas Olímpicas</label>
+        </div>
+      </li>      
+      <li class="" style="height: 6vh;">
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(6)">
+          <font-awesome-icon icon="fa-solid fa-building" />
+          <label>Apartamentos</label>
+        </div>
+      </li>
+      <li class="" style="height: 6vh;">
+        <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(7)">
+          <font-awesome-icon icon="fa-solid fa-store" />
+          <label>Almacenes</label>
         </div>
       </li>
     </ul>
@@ -45,10 +69,21 @@
 
 <script>
 export default {
-  name: "Filter_comp",
+  name: "Filter_comp", 
   methods: {
-    filter(tipo) {
-      this.$store.dispatch("filterNodeUsersData", tipo);
+    filtroTipo(tipo) { 
+      console.log("filtroTipo", tipo)
+      this.$store.dispatch("filtroTipo", tipo);
+
+    },
+    filtroPeriodo(tipo){
+      console.log("filtroPeriodo", tipo)
+      this.$store.dispatch("filtroPeriodo", tipo);
+      
+    },
+    listaCompartir(){
+      this.$store.dispatch("listaCompartir");
+
     }
   }
 };

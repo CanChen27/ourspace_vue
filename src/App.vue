@@ -1,12 +1,15 @@
 <template>
-  <div class="container">
-    <!-- Content here -->
+  <!-- Content here -->
+  <div>
     <Navbar_comp v-show="this.$route.meta.showHeader"></Navbar_comp>
-
-    <router-view></router-view>
-
+    <div class="container">
+      <router-view></router-view>
+      
+    </div>
 
   </div>
+
+
 </template>
 
 <script>
@@ -18,8 +21,9 @@ import Navbar_comp from "@/components/Navbar_comp";
 export default {
   name: "App",
   components: { Navbar_comp },
-  mounted(){
+  async mounted(){
     console.log("APP::", this.$route.meta);
+    await this.$store.dispatch('userInfo');
   }
 
 };

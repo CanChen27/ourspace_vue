@@ -4,13 +4,13 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 import Details from "@/pages/Details";
-import Home from "@/pages/Home";
-import Error from "@/pages/Error";
+import Home from "@/pages/Home"; 
 
 
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import Admin from "@/pages/Admin";
+import Root from "@/pages/Root";
 // import List from "@/pages/List";
 // import Map from "@/pages/Map";
 // import ResourceInfo from "@/pages/ResourceInfo";
@@ -33,19 +33,7 @@ export default new VueRouter({
         showHeader: true,
         showFilter: true
       },
-    },
-    {
-      path: "/error",
-      component: Error,
-      alias: "404"
-    },
-    // {
-    //   path: "/list",
-    //   component: List,
-    //   meta: {
-    //     showFooter: false,
-    //   },
-    // },
+    }, 
     {
       path: "/login",
       component: Login,
@@ -67,6 +55,14 @@ export default new VueRouter({
       component: Admin,
       meta: {
         showHeader: true,
+        showFooter: false,
+      },
+    },
+    {
+      path: "/root",
+      component: Root,
+      meta: {
+        showHeader: false,
         showFooter: false,
       },
     },

@@ -1,10 +1,10 @@
 //listAjax modulo
 //state: datos del store
 
-import { reqNodeResourceList, reqNodeDefaultFilterList } from "@/api";
+import { reqNodeResourceList, reqfilterTipoList, reqfilterPeriodoList, reqlistaCompartir } from "@/api";
 
 const state = {
-  userListNode: [],
+  userListNode: JSON.parse(localStorage.getItem('RESOURCELIST')),
   dataList: 1,
 };
 //mutations una forma de modificar el state
@@ -18,6 +18,9 @@ const mutations = {
   FILTER_NODE_USERS_DATA(state, userListNode) {
     state.userListNode = userListNode;
   },
+  COMPARTIR_NODE_USERS_DATA(state, userListNode) {
+    state.userListNode = userListNode;
+  },
 };
 //
 const actions = {
@@ -27,16 +30,34 @@ const actions = {
     if(result.status == 200){
       console.log("Esto funciona", result);
       context.commit("GET_NODE_USERS_DATA", result.data);
+      localStorage.setItem("RESOURCELIST", JSON.stringify(result.data));
 
     }
   },
-  async filterNodeUsersData(context, keyWord) {
-    console.log(">>actions::filterNodeUsersData");
-    console.log(">>keyword::", keyWord);
-    let result = await reqNodeDefaultFilterList(keyWord.keyWord);
+  async filtroTipo(context, keyWord) {
+    console.log(">>actions::filtroTipo"); 
+    let result = await reqfilterTipoList(keyWord);
     console.log(">>result::", result);  
 
     context.commit("FILTER_NODE_USERS_DATA", result.message.data);
+    
+  },
+  async filtroPeriodo(context, keyWord) {
+    console.log(">>actions::filtroPeriodo"); 
+    let result = await reqfilterPeriodoList(keyWord);
+    console.log(">>result::", result);  
+
+    context.commit("FILTER_NODE_USERS_DATA", result.message.data);
+    
+  },
+
+  async listaCompartir(context) {
+    console.log(">>actions::filtroPeriodo"); 
+    let result = await reqlistaCompartir();
+    console.log(">>result::", result);  
+
+    context.commit("COMPARTIR_NODE_USERS_DATA", result.message.data);
+    
   },
 };
 //getters:

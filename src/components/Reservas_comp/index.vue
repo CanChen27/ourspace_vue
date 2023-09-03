@@ -1,32 +1,28 @@
 <template>
 <div>
     <div>
-        <h1>{{ title }}</h1> 
+        <h4>{{ title }}</h4> 
     </div>
     <div class="d-flex flex-wrap"> 
-
-        <b-card 
-            v-for="(item, index) in misReservas" :key="item.idOferta"
-            :title=item.nombre
-            :img-src="`http://localhost:8889/${JSON.parse(item.img)[0]}`"
-            img-alt="Image"
-            img-top
-            tag="article"
-            style="max-width: 15rem; min-width: 10rem;"
-            class="mb-5 mr-4"
-        >
-        <b-card-text> {{ item.descripcion }} </b-card-text>
-          <b-card-text> {{ item.precio }}€- hora </b-card-text>
-
-          <template #footer>
-              <div>
-                  <b-button variant="danger" @click="onDelete(item.uuid)">Cancelar Reserva</b-button>
-                  <b-button variant="primary" @click="onOpenUpdateModal(index)" >Modificar Reserva</b-button>
-  
-              </div>
  
-      </template>
-        </b-card>
+        <div v-for="(item, index) in misReservas" :key="index" class="m-1">
+            <div class="image-container">
+                <b-card-img
+                    :src="`http://localhost:8889/${JSON.parse(item.img)[0]}`" 
+                    class="img-fluid fixed-size-image"
+                
+                ></b-card-img> 
+            </div>
+            <b-card-text> {{ item.descripcion }} </b-card-text>
+            <b-card-text> {{ item.precio }}€- hora </b-card-text>
+ 
+            <div class="d-flex">
+                <b-button variant="danger" @click="onDelete(item.uuid)">Cancelar</b-button>
+                <b-button variant="primary" @click="onOpenUpdateModal(index)" >Modificar</b-button>
+
+            </div>
+  
+        </div>
     </div>
 
 
@@ -55,7 +51,11 @@
                 </b-form-group>
 
                 <b-form-group id="input-group-4" v-if="modificarForm.compartir == 'Buscar gente'"> 
-                <b-form-input type="number" v-model="modificarForm.genteCompartir"></b-form-input>
+                    <div class="d-flex align-items-center ">
+                        <b-form-input  class="mr-3" type="number" v-model="modificarForm.genteCompartir"  min="1" :max="modificarForm.nArrendatarios -1"> </b-form-input>
+                        <span>/ {{ modificarForm.nArrendatarios -1 }} Arrendatarios</span>
+
+                    </div>
                 </b-form-group>
 
                 <div >
@@ -94,6 +94,7 @@ export default {
                 uuid:'',
                 idOferta: '',
                 idArrendatario: '',
+                nArrendatarios:  '',
             },
             reservModModal: false,
             share: [{ text: 'Selecciona una opción', value: null }, 'Reservar', 'Buscar gente'],
@@ -128,6 +129,7 @@ export default {
             this.modificarForm.uuid = this.$store.state.userNodeData.misReservas[idx].uuid;
             this.modificarForm.idOferta = this.$store.state.userNodeData.misReservas[idx].idOferta;
             this.modificarForm.idArrendatario = this.$store.state.userNodeData.misReservas[idx].idArrendatario;
+            this.modificarForm.nArrendatarios = this.$store.state.userNodeData.misReservas[idx].nArrendatarios;
             this.showModal();
         },
         onReset(event){
@@ -141,6 +143,7 @@ export default {
                 uuid:'',
                 idOferta: '',
                 idArrendatario: '',
+                nArrendatarios: '',
             }
         },
 
@@ -150,7 +153,7 @@ export default {
 
             let res = await reqmodificarReserva(this.modificarForm);
             console.log(">>onSubmit res: ", res);
-            if(res.code == 200){
+            if(res.status == 200){
                 this.cargarMisReservas();
 
             }
@@ -161,7 +164,7 @@ export default {
 
             let res = await reqcancelarReserva({'uuid': uuid});
             console.log(">>onDelete res: ", res);
-            if(res.code == 200){
+            if(res.status == 200){
                 this.cargarMisReservas();
 
             }
@@ -177,6 +180,17 @@ export default {
 </script>
 
 <style>
+.image-container {
+  width: 190px;
+  height: 190px;
+  overflow: hidden;
+}
 
+/* Asegurar que la imagen ocupe todo el espacio disponible sin perder la relación de aspecto */
+.fixed-size-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>
   

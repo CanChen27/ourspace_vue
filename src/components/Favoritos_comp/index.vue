@@ -1,31 +1,27 @@
 <template>
 <div>
     <div>
-        <h1>{{ title }}</h1> 
+        <h4>{{ title }}</h4> 
     </div>
     <div class="d-flex flex-wrap"> 
-
-        <b-card 
-            v-for="(item, idx) in favoritos" :key="item.idOferta"
-            :title=item.nombre
-            :img-src="`http://localhost:8889/${JSON.parse(item.img)[0]}`"
-            img-alt="Image"
-            img-top
-            tag="article"
-            style="max-width: 15rem; min-width: 10rem;"
-            class="mb-5 mr-4"
-        >
+ 
+        <div v-for="(item, idx) in favoritos" :key="item.idOferta" class="m-1">
+            <div class="image-container">
+                <b-card-img
+                    :src="`http://localhost:8889/${JSON.parse(item.img)[0]}`" 
+                    class="img-fluid fixed-size-image"
+                
+                ></b-card-img> 
+            </div>
         <b-card-text> {{ item.descripcion }} </b-card-text>
           <b-card-text> {{ item.precio }}€- hora </b-card-text>
-
-          <template #footer>
-              <div>
-                  <b-button variant="danger" @click="onDelete(item.idOferta)">Eliminar de Favoritos</b-button> 
-                  <router-link class="btn btn-primary" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Más información</router-link>
-              </div>
  
-      </template>
-        </b-card>
+              <div>
+                  <b-button variant="danger" @click="onDelete(item.idOferta)">Eliminar</b-button> 
+                  <router-link class="btn btn-primary" :to="`/details?id=${item.idOfertas}&idx=${idx}`"> Reservar</router-link>
+              </div>
+  
+        </div>
     </div>
  
  
@@ -94,6 +90,17 @@ export default {
 </script>
 
 <style>
+.image-container {
+  width: 190px;
+  height: 190px;
+  overflow: hidden;
+}
 
+/* Asegurar que la imagen ocupe todo el espacio disponible sin perder la relación de aspecto */
+.fixed-size-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 </style>
   

@@ -1,9 +1,11 @@
 <template>
-  <div class="d-flex justify-content-center align-item-center row">
+  <div class="d-flex justify-content-center align-item-center vh-100">
     
-    <b-card title="Registro" class="w-custom h-custom col-6 mt-4">
-    <b-form v-if="show" class="d-flex justify-content-center  align-items-center row">
-      <div class="col-10">
+    <b-card class="card h-custom col-4 my-auto py-3">
+    <b-form v-if="show" class="d-flex justify-content-center align-items-center row">
+      <h5 class="text-center col-12">OurSpace</h5>
+      <h6 class="text-center col-12" >Iniciar Sesión</h6>
+      <div class="col-11">
         <b-form-group
           id="input-group-1"
           label="Nombre Usuario"
@@ -15,6 +17,8 @@
             type="text"
             placeholder="Introduce nombre del usuario"
             required
+                          :state="usernameState"
+
           ></b-form-input>
         </b-form-group>
   
@@ -24,6 +28,8 @@
             v-model="form.email"
             placeholder="Introduce tu correo"
             required
+                          :state="emailState"
+
           ></b-form-input>
         </b-form-group>
   
@@ -33,6 +39,9 @@
             v-model="form.phone"
             placeholder="Introduce tu número de teléfono"
             required
+            type="number"
+                          :state="phoneState"
+            
           ></b-form-input>
         </b-form-group>
   
@@ -43,6 +52,8 @@
             placeholder="Introduce la contraseña"
             type="password" 
             required
+                          :state="passwdState"
+
           ></b-form-input>
         </b-form-group>
   
@@ -52,8 +63,9 @@
             v-model="form.passwd_conf"
             placeholder="Repite la constraseña"
             type="password"
-  
             required
+            :state="passwd_confState"
+
           ></b-form-input>
         </b-form-group>
   
@@ -86,20 +98,69 @@ export default {
           passwd: '', 
           passwd_conf : '', 
         }, 
-        show: true
+        show: true,
+        usernameState: null,
+        emailState: null,
+        phoneState: null,
+        passwdState: null,
+        passwd_confState: null,
+
       }
     },
     methods: {
+      resetInput(){
+        this.usernameState = null;
+        this.emailState = null;
+        this.phoneState = null;
+        this.passwdState = null;
+        this.passwd_confState = null;
+      },
       async userReg() {
         // alert(JSON.stringify(this.form));
         try{
+          const patronEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
           const {username, email, phone, passwd, passwd_conf} = this.form;
+          const patronTelefono = /^\d{9}$/;
           console.log("userReg", this.form);
-          if(username&&email&&phone&& passwd==passwd_conf){
-            await this.$store.dispatch('userReg', this.form);
-            this.$router.push('/login');
+          if(username&&patronEmail.test(email)&&patronTelefono.test(phone)&&passwd && passwd==passwd_conf){
+            let res = await this.$store.dispatch('userReg', this.form);
+            if(res.status == 200){
+              alert(res.text)
+              this.$router.push('/login');
+
+            }else{
+              alert(res.text);
+            }
           }else{
-            alert("Register:: faltan datos");
+            this.resetInput();
+            if(username.length < 1){ 
+              this.usernameState = false;
+            }
+
+            if(email.length < 1 || !patronEmail.test(email)){ 
+              console.log("patronEmail", patronEmail.test(email))
+              this.emailState = false;
+            }
+
+            if(phone.length < 1 || !patronTelefono.test(phone)){ 
+              this.phoneState = false;
+            }
+
+            if(passwd.length < 1){ 
+              this.passwdState = false;
+            }
+            
+            if(passwd_conf.length < 1){ 
+              this.passwd_confState = false;
+            }
+
+            if(passwd!=passwd_conf){
+              this.passwdState = false;
+              this.passwd_confState = false;
+
+            }
+            
+            alert("Error: faltan datos o datos incorrectos");
           }
 
         }catch (error){
@@ -110,13 +171,6 @@ export default {
 };
 </script>
 
-<style>
-.w-custom{
-  width: 60vw;
-}
-
-.h-custom{
-  height: auto;
-}
+<style> 
 
 </style>

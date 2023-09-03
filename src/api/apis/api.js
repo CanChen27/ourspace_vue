@@ -1,8 +1,5 @@
 import axios from "axios";
-
-export const API_DEFAULT_PARAMS = {
-  type: -1
-}
+ 
 
 //timeout 5000 => 5s
 const apiReq = axios.create({

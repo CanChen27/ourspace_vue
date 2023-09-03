@@ -1,13 +1,15 @@
 <template>
-  <div class="container">
+  <div>
     <!-- Content here -->
     <!-- {{ $store.state.resourceListNodeData.userListNode }} -->
     <ul class="d-flex align-items-center justify-content-between flex-wrap">
       <li
         v-for="(item, idx) in this.$store.state.resourceListNodeData.userListNode"
-        :key="item.id"
-      > 
-        <b-card >
+        :key="idx" :id="`oferta${item.idOfertas}`"
+        @click="goDetails(item.idOfertas, idx)" class=" mb-4  "
+        @mouseenter="toggleHoverEnter(item.idOfertas)"
+        @mouseleave="toggleHoverLeave(item.idOfertas)" 
+      >  
         <div class="image-container">
           <b-card-img
             :src="`http://localhost:8889/${JSON.parse(item.img)[0]}`" 
@@ -15,14 +17,14 @@
           
           ></b-card-img> 
         </div>
-        <b-card-title> {{ item.nombre }} </b-card-title>
+          <b-card-text class="fs-2"> {{ item.nombre }} </b-card-text>
 
-          <b-card-text> {{ item.descripcion }} </b-card-text>
-          <b-card-text> {{ item.precio }} monedas/hora </b-card-text>
+          <b-card-text class="text-secondary"> {{ item.descripcion }} </b-card-text>
+          <b-card-text class="text-secondary"> {{ item.precio }} monedas/hora </b-card-text>
 
           <!-- <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button> -->
-          <router-link class="btn btn-primary" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Más información link</router-link>
-        </b-card>
+          <!-- <router-link class="btn btn-primary col-12" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Saber más</router-link> -->
+ 
       </li>
 
       <!-- <List_item_comp></List_item_comp> -->
@@ -30,11 +32,9 @@
   </div>
 </template>
 
-<script>
-import List_item_comp from "@/components/List_comp/List_item_comp";
+<script> 
 export default {
-  name: "List_comp",
-  comments: { List_item_comp },
+  name: "List_comp", 
   data() {
     return { 
       list: this.$store.state.resourceListNodeData.userListNode,
@@ -45,16 +45,32 @@ export default {
     this.$store.dispatch("getNodeUsersData");
   },
   methods: {
-    goDetails(_id) {
-      console.log(">>list_comp", _id);
-      // e.preventDefault();
+    goDetails(id,idx) { 
+      console.log(">>list_comp", id, idx);
       this.$router.push({
         name: "detailsName",
         query: {
-          id :_id
+          idx: idx,
+          id :id,
         }
       });
-    }
+    },
+    toggleHoverEnter(id){
+      console.log("toggleHoverEnter");
+      this.$("#oferta"+id).css({
+        "transition": "all 0.3s ease",
+        "transform": "scale(1.05)" 
+      }).addClass("shadow bg-white rounded");
+    },
+    toggleHoverLeave(id){
+      console.log("toggleHoverLeave") 
+      this.$("#oferta"+id).css({
+        "transition": "all 0.3s ease",
+        "transform": "scale(1)" 
+      }).removeClass("shadow bg-white rounded")  
+
+    } 
+
   }
 };
 </script>
@@ -62,7 +78,7 @@ export default {
 <style>
 /* Estilos para asegurar que las imágenes mantengan su relación de aspecto */
 .image-container {
-  width: 300px;
+  width: 200px;
   height: 200px;
   overflow: hidden;
 }

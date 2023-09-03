@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container-xxl">
     <!-- Content here -->
     <Filter_comp></Filter_comp>
     <List_comp></List_comp>

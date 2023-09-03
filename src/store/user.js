@@ -2,7 +2,7 @@
 //state: datos del store 
 
 // import { requserReg, requserLogin, requserInfo, requserLogout } from "@/api";
-import { requserReg, requserLogin, requserInfo, reqmisProductos, reqmisReservas, reqgetNormas, reqlistaFavoritos, reqmisNotificaciones } from "@/api";
+import { requserReg, requserLogin, requserInfo, reqmisProductos, reqmisReservas, reqgetNormas, reqlistaFavoritos, reqmisNotificaciones, reqrootUsuarios } from "@/api";
 
 const state = {
   token: localStorage.getItem('TOKEN'),
@@ -11,7 +11,8 @@ const state = {
   misReservas:JSON.parse(localStorage.getItem('MISRESERVAS')),
   normas:JSON.parse(localStorage.getItem('GETNORMAS')),
   favoritos: JSON.parse(localStorage.getItem('FAVORITOS')),
-  notificaciones: JSON.parse(localStorage.getItem('NOTIFICACIONES'))
+  notificaciones: JSON.parse(localStorage.getItem('NOTIFICACIONES')),
+  listaUsuarios: JSON.parse(localStorage.getItem('LISTAUSUARIOS'))
 
 };
 //mutations una forma de modificar el state
@@ -28,12 +29,17 @@ const mutations = {
     state.misProductos={};
     state.misReservas={};
     state.normas=[];
+    state.favoritos={};
+    state.notificaciones={};
+    state.listaUsuarios={};
     localStorage.removeItem('TOKEN');
     localStorage.removeItem('USERINFO');
     localStorage.removeItem('MISPRODUCTOS');
     localStorage.removeItem('MISRESERVAS');
-    localStorage.removeItem('NOTIFICACIONES');
     localStorage.removeItem('GETNORMAS');
+    localStorage.removeItem('FAVORITOS');
+    localStorage.removeItem('NOTIFICACIONES');
+    localStorage.removeItem('LISTAUSUARIOS');
   },
   MISPRODUCTOS (state, misProductos){
     state.misProductos = misProductos;
@@ -47,6 +53,9 @@ const mutations = {
   NOTIFICACIONES(state, notificaciones){
     state.notificaciones = notificaciones
   },
+  LISTAUSUARIOS(state, listaUsuarios){
+    state.listaUsuarios = listaUsuarios
+  },
   GETNORMAS(state, normas){
     state.normas = normas;
   },
@@ -54,11 +63,22 @@ const mutations = {
 //
 const actions = {
  //registrar usuario
-  async userReg(state, user){
-    console.log(">>userReg",user);
+  async userReg(state, user){ 
 
     let result = await requserReg(user);
-    console.log(">>userReg", result);
+    console.log("userReg store", result);
+    if(result.status == 200){ 
+      return {
+        status : 200,
+        text : 'Felicidades te has registrado de forma correcta'
+      };
+    } 
+    else{
+      return {
+        status : 1, 
+        text: "Hubo un error en el registro intentelo de nuevo. Error::" + result.message
+      }
+    }
   },
 
   async userLog({commit}, user){
@@ -82,11 +102,14 @@ const actions = {
     }else if(result.status == 300){
       return {
         status : 300,
-        text : 'Usuario contraseña incorrecto'
+        text : 'Usuario/contraseña incorrecto'
       };
     }
     else{
-      return Promise.reject(new Error("userLog ha fallado"));
+      return {
+        status : 1, 
+        text: "Usuario/contraseña incorrecto"
+      }
     }
 
   },
@@ -145,6 +168,16 @@ const actions = {
     if(result.status == 200){
       commit('NOTIFICACIONES', result.data); 
       localStorage.setItem("NOTIFICACIONES", JSON.stringify(result.data));
+
+    }
+  },
+
+  async buscarListaUsuarios({commit}){
+    let result = await reqrootUsuarios();
+    console.log("buscarListaUsuarios store", result);
+    if(result.status == 200){
+      commit('LISTAUSUARIOS', result.data); 
+      localStorage.setItem("LISTAUSUARIOS", JSON.stringify(result.data));
 
     }
   },
