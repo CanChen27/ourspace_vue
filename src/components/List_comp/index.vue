@@ -19,7 +19,7 @@
         </div>
           <b-card-text class="fs-2"> {{ item.nombre }} </b-card-text>
 
-          <b-card-text class="text-secondary"> {{ item.descripcion }} </b-card-text>
+          <b-card-text class="text-secondary"> {{ item.organizacion }} </b-card-text>
           <b-card-text class="text-secondary"> {{ item.precio }} monedas/hora </b-card-text>
 
           <!-- <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button> -->

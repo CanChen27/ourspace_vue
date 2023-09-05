@@ -17,7 +17,7 @@
                 
                 ></b-card-img> 
             </div>
-        <b-card-text> {{ item.descripcion }} </b-card-text>
+        <b-card-text> {{ item.nombre }} </b-card-text>
           <b-card-text> {{ item.precio }}€- hora </b-card-text>
  
               <div>

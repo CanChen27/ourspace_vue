@@ -40,6 +40,8 @@ const mutations = {
     localStorage.removeItem('FAVORITOS');
     localStorage.removeItem('NOTIFICACIONES');
     localStorage.removeItem('LISTAUSUARIOS');
+    localStorage.removeItem('RESOURCELIST');
+    this.$store.state.userNodeData.userListNode = {};
   },
   MISPRODUCTOS (state, misProductos){
     state.misProductos = misProductos;

@@ -30,7 +30,7 @@
       <li class="" style="height: 6vh;">
         <div class="filterBtn d-flex align-items-center flex-column" v-on:click="filtroTipo(2)">
           <font-awesome-icon icon="fa-solid fa-futbol" />
-          <label>Futol</label>
+          <label>Fútbol</label>
         </div>
       </li>
       <li class="" style="height: 6vh;">
