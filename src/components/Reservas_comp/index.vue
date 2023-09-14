@@ -14,7 +14,8 @@
                 ></b-card-img> 
             </div>
             <b-card-text> {{ item.nombre }} </b-card-text>
-            <b-card-text> {{ item.precio }}€- hora </b-card-text>
+            <b-card-text v-if="item.plazoOferta== 0"> {{ item.precio * item.nArrendatarios }} monedas/hora </b-card-text>
+          <b-card-text  v-else> {{ item.precio * item.nArrendatarios }} monedas/día </b-card-text> 
  
             <div class="d-flex">
                 <b-button variant="danger" @click="onDelete(item.uuid)">Cancelar</b-button>

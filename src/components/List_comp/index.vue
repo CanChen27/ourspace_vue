@@ -20,7 +20,9 @@
           <b-card-text class="fs-2"> {{ item.nombre }} </b-card-text>
 
           <b-card-text class="text-secondary"> {{ item.organizacion }} </b-card-text>
-          <b-card-text class="text-secondary"> {{ item.precio }} monedas/hora </b-card-text>
+          <b-card-text class="text-secondary" v-if="item.plazoOferta== 0"> {{ item.precio * item.nArrendatarios }} monedas/hora </b-card-text>
+          <b-card-text class="text-secondary"  v-else> {{ item.precio * item.nArrendatarios }} monedas/día </b-card-text> 
+
 
           <!-- <b-button variant="primary" @click="goDetails(item.id)">Más información</b-button> -->
           <!-- <router-link class="btn btn-primary col-12" :to="`/details?id=${item.idOfertas}&idx=${idx}`">  Saber más</router-link> -->
